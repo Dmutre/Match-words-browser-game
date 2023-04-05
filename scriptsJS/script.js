@@ -1,36 +1,43 @@
 "use strict";
 
-const { getRandomValues } = require('node:crypto');
 const fs = require('node:fs').promises;
 const path = require('node:path');
-let words = [];
+const words = [];
 
 const dictionaryPath = path.join(__dirname, '..', 'Dictionarys', 'English-dict.txt');
-console.log(filePath);
+//console.log(dictionaryPath);
 
+async function main() {
+  try {
+    const data = await fs.readFile(dictionaryPath, "utf-8");
+    words = data.split("\n");
+    console.log("Work is done");
+    console.log(getRandWordPart());
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-
-fs.readFile(dictionaryPath, "utf-8").then( (data) => {
-  words = data.split("\n");
-  console.log("Work is done");
-}).catch((error) =>{
-  console.error(error);
-})
-
+function getRandNumberInRange(start, end){
+  const number = Math.floor(Math.random() * (end - start) +start);
+  return number;
+}
 
 function getRandWord(){
-  const keys = Array.from(Words.keys());
-  const randIndex = Math.floor(Math.random() * keys.length);
-  const randKey = keys[randIndex];
-  const randWord = Words.get(randKey);
+  const randKey = getRandNumberInRange(0, words.length);
+  console.log(words.length);
+  const randWord = words[randKey];
+  console.log(typeof randWord);
   return randWord;
 }
 
 function getRandWordPart(){
-  const partLength = Math.random() * 1 + 2;//random length of word`s part (from 2 to 3)
-  const randWord = getRandWord();
-  const startIndex = Math.floor(Math.random() * (word.length - 2));
-  const wordPart = randWord.substr(startIndex, length);
-
-  return wordPart;
+  let randWord = getRandWord();
+  const startIndex = Math.floor(Math.random() * (randWord.length - 2)); // choose random starting index
+  const endIndex = startIndex + Math.floor(Math.random() * 2) + 1; // choose random ending index (2-3 characters long)
+  return randWord.slice(startIndex, endIndex); // extract substring and return it
 }
+
+
+
+main();
