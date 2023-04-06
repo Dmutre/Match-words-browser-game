@@ -2,7 +2,7 @@
 
 const fs = require('node:fs').promises;
 const path = require('node:path');
-const words = [];
+let words = [];
 
 const dictionaryPath = path.join(__dirname, '..', 'Dictionarys', 'English-dict.txt');
 //console.log(dictionaryPath);
@@ -12,7 +12,7 @@ async function main() {
     const data = await fs.readFile(dictionaryPath, "utf-8");
     words = data.split("\n");
     console.log("Work is done");
-    console.log(getRandWordPart());
+    return words;
   } catch (error) {
     console.error(error);
   }
@@ -23,21 +23,25 @@ function getRandNumberInRange(start, end){
   return number;
 }
 
-function getRandWord(){
+async function getRandWord(){
+  if (words.length === 0) {
+    words = await main();
+  }
   const randKey = getRandNumberInRange(0, words.length);
-  console.log(words.length);
   const randWord = words[randKey];
-  console.log(typeof randWord);
+  console.log(randWord);
   return randWord;
 }
 
-function getRandWordPart(){
-  let randWord = getRandWord();
-  const startIndex = Math.floor(Math.random() * (randWord.length - 2)); // choose random starting index
-  const endIndex = startIndex + Math.floor(Math.random() * 2) + 1; // choose random ending index (2-3 characters long)
-  return randWord.slice(startIndex, endIndex); // extract substring and return it
+async function getRandWordPart() {//part from 2 to 3 letters
+  const randWord = await getRandWord();
+  const startIndex = getRandNumberInRange(0, randWord.length - 3);
+  const endIndex = startIndex + Math.floor(Math.random() * 2) + 2;
+  return randWord.slice(startIndex, endIndex);
 }
 
-
-
-main();
+getRandWordPart().then((result) => {
+  console.log(result);
+}).catch((error) => {
+  console.error(error);
+});
