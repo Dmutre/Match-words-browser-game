@@ -7,6 +7,19 @@ let words = [];
 const dictionaryPath = path.join(__dirname, '..', 'Dictionarys', 'English-dict.txt');
 //console.log(dictionaryPath);
 
+async function Start(){
+  await fetch('http://localhost:3000/')
+  .then(response => response.text())
+  .then(data => {
+    words = data.split("\n");
+    console.log("Work is done");
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
+
+/*
 async function main() {
   try {
     const data = await fs.readFile(dictionaryPath, "utf-8");
@@ -16,7 +29,7 @@ async function main() {
   } catch (error) {
     console.error(error);
   }
-}
+}*/
 
 function getRandNumberInRange(start, end){
   const number = Math.floor(Math.random() * (end - start) +start);
@@ -39,9 +52,10 @@ async function getRandWordPart() {//part from 2 to 3 letters
   const endIndex = startIndex + Math.floor(Math.random() * 2) + 2;
   return randWord.slice(startIndex, endIndex);
 }
-
+/*
 getRandWordPart().then((result) => {
   console.log(result);
 }).catch((error) => {
   console.error(error);
 });
+*/

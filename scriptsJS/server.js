@@ -1,12 +1,24 @@
 "use strict";
 
 
-let http = require("http");
+const http = require('node:http');
+const fs = require('node:fs');
+const path = require("node:path");
 
-let server = http.createServer((req, res) => {
-  res.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
-  res.end('We track port 3000');
-  console.log("We track server");
+const dictionaryPath = path.join(__dirname, '..', 'Dictionarys', 'English-dict.txt');
+
+
+const server = http.createServer((req, res) => {
+  fs.readFile(dictionaryPath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.statusCode = 500;
+      res.end();
+      return;
+    }
+    res.setHeader('Content-Type', 'text/plain');
+    res.end(data);
+  });
 });
 
 server.listen(3000, '127.0.0.1');
