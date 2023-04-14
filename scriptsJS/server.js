@@ -7,7 +7,6 @@ const path = require("node:path");
 
 const dictionaryPath = path.join(__dirname, '..', 'Dictionarys', 'English-dict.txt');
 
-
 const server = http.createServer((req, res) => {
   fs.readFile(dictionaryPath, 'utf-8', (err, data) => {
     if (err) {
