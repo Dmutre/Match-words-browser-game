@@ -34,6 +34,11 @@ function getRandWordPart() {//part from 2 to 3 letters
   return randWord.slice(startIndex, endIndex);
 }
 
+function matchWord(word){
+  if(word === currentWord) return true;
+  else return false;
+}
+
 async function Call(){
   await Start();
   console.log(getRandWordPart());

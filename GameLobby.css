@@ -2,11 +2,16 @@
   background-color: red;
 }
 
-
 .container{
   display: flex;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30%;
+  flex-direction: column;
 }
 
 .wordInput{
-  
+  margin-top: 60%;
+  justify-content: center;
 }
