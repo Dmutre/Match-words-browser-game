@@ -1,0 +1,22 @@
+{
+  "name": "match-words-bworser-game",
+  "version": "0.0.1",
+  "description": "Browser game",
+  "main": "/scriptsJS/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmutre/Match-words-bworser-game.git"
+  },
+  "author": "Dmutre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dmutre/Match-words-bworser-game/issues"
+  },
+  "homepage": "https://github.com/Dmutre/Match-words-bworser-game#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

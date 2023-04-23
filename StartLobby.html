@@ -8,12 +8,18 @@
 </head>
 <body>
 
+  <button id="getDataBtn">Get Data</button>
+  <script>
+    document.getElementById('getDataBtn').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/getdata'); // Send request to server
+        const data = await response.text(); // Read response as text
+        console.log(data); // Log the data
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  </script>
   
-  <button onclick="Start()">Start</button>
-
-
-
-  
-  <script src="\scriptsJs\script.js"></script>
 </body>
 </html>

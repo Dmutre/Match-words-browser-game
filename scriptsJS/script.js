@@ -4,7 +4,7 @@ let words = [];
 let currentWord;
 
 async function Start(){
-  await fetch('http://localhost:3000/api/data')
+  await fetch('http://localhost:3000/data')
   .then(response => response.text())
   .then(data => {
     words = data.split("\n");
@@ -13,6 +13,10 @@ async function Start(){
   .catch(error => {
     console.error(error);
   });
+}
+
+function hello(){
+  console.log("Hello Node js");
 }
 
 function getRandNumberInRange(start, end){
