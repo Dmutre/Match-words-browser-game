@@ -3,8 +3,18 @@
 let words = [];
 let currentWord;
 
+document.getElementById('getDataBtn').addEventListener('click', async () => {
+  try {
+    const response = await fetch('/getdata'); // Send request to server
+    const data = await response.text(); // Read response as text
+    console.log(data); // Log the data
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 async function Start(){
-  await fetch('http://localhost:3000/data')
+  await fetch('/getdata')
   .then(response => response.text())
   .then(data => {
     words = data.split("\n");
