@@ -1,4 +1,6 @@
 body {
+  background-image: url('backGround.jpg'); 
+  background-size: cover; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,6 +13,13 @@ body {
 }
 
 #startBtn {
-  padding: 10px 20px;
-  font-size: 24px;
+  background-color: #5adf5f;
+  border: none;
+  color: rgb(140, 17, 151);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-family: 'Pangolin', 'Source Sans Pro', sans-serif;
 }
