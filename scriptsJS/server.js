@@ -13,7 +13,7 @@ const startLobbyPath = path.join(__dirname, '..', 'StartLobby');
 app.use(express.static(startLobbyPath));
 
 app.get('/', (req, res) => {
-  res.send('hello world');
+  res.sendFile(path.join(startLobbyPath, "StartLobby.html"));
 });
 
 app.get('/getdata', (req, res) => {
