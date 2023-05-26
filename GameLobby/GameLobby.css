@@ -1,17 +1,73 @@
-.body{
-  background-color: red;
+body {
+  background-color: #ecd7ff;
+  margin: 0;
+  padding: 0;
 }
 
-.container{
+.container {
   display: flex;
-  width: 300px;
-  justify-content: center;
   align-items: center;
-  margin-top: 30%;
+  justify-content: center;
+  height: 100vh;
+}
+
+.window {
+  width: 200px;
+  height: 200px;
+  background-color: rgba(164, 90, 199, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.window-content {
+  width: 80%;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.window-text {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.player {
+  position: absolute;
+  bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
 }
 
-.wordInput{
-  margin-top: 60%;
-  justify-content: center;
+.player img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.player input {
+  padding: 8px;
+  border: none;
+  background-color: #ffffff;
+  border-radius: 5px;
+  font-size: 14px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  margin-top: 10px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(164, 90, 199, 0.8);
 }
