@@ -1,32 +1,22 @@
 "use strict";
 
+const fs = require('node:fs');
+const path = require('node:path');
+
 let words = [];
 let currentWord;
 
-document.getElementById('getDataBtn').addEventListener('click', async () => {
-  try {
-    const response = await fetch('/getdata'); // Send request to server
-    const data = await response.text(); // Read response as text
-    console.log(data); // Log the data
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-async function Start(){
-  await fetch('/getdata')
-  .then(response => response.text())
-  .then(data => {
-    words = data.split("\n");
-    console.log("Work is done");
-  })
-  .catch(error => {
-    console.error(error);
+function readDictionary(dic) {
+  fs.readFile(dic, 'utf-8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      console.log('Data is reading');
+      words = data.split('\n').map(word => word.trim());
+      console.log('Data is completely read');
+    }
   });
-}
-
-function hello(){
-  console.log("Hello Node js");
 }
 
 function getRandNumberInRange(start, end){
@@ -52,10 +42,3 @@ function matchWord(word){
   if(word === currentWord) return true;
   else return false;
 }
-
-async function Call(){
-  await Start();
-  console.log(getRandWordPart());
-}
-
-Call();

@@ -1,13 +1,16 @@
 'use strict';
 
 const http = require('node:http');
-const fs = require('node:fs');
 const path = require('node:path');
+const fs = require('node:fs');
 const express = require('express');
 const app = express();
 const PORT = 3000;
 
-const engDictionaryPath = path.join(__dirname, '..', 'Dictionarys', 'English-dict.txt');
+let words = [];
+let currentWord;
+
+const dictionaryPath = path.join(__dirname, '..', 'Dictionarys');
 const startLobbyPath = path.join(__dirname, '..', 'StartLobby');
 const gameLobbyPath = path.join(__dirname, '..', 'GameLobby');
 
@@ -19,19 +22,52 @@ app.get('/', (req, res) => {
 });
 
 app.get('/gameLobby', (req, res) => {
+  readDictionary(dictionaryPath);
   res.sendFile(path.join(gameLobbyPath, 'GameLobby.html'));
 });
 
-app.get('/getdata', (req, res) => {
-  fs.readFile(engDictionaryPath, 'utf-8', (err, data) => {
+app.get('/getWord', (req, res) => {
+  const word = getRandWord(); 
+
+  res.json({ word: word });
+});
+
+function readDictionary(dic) {
+  fs.readFile(path.join(dic, 'English-dict.txt'), 'utf-8', (err, data) => {
     if (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
     } else {
-      res.send(data);
+      console.log('Data is reading');
+      words = data.split('\n').map(word => word.trim());
+      console.log('Data is completely read');
     }
   });
-});
+}
+
+function getRandNumberInRange(start, end){
+  const number = Math.floor(Math.random() * (end - start) +start);
+  return number;
+}
+
+function getRandWord(){
+  const randKey = getRandNumberInRange(0, words.length);
+  currentWord = words[randKey];
+  console.log(currentWord);
+  return currentWord;
+}
+
+function getRandWordPart() {//part from 2 to 3 letters
+  const randWord = getRandWord();
+  const startIndex = getRandNumberInRange(0, randWord.length - 3);
+  const endIndex = startIndex + Math.floor(Math.random() * 2) + 2;
+  return randWord.slice(startIndex, endIndex);
+}
+
+function matchWord(word){
+  if(word === currentWord) return true;
+  else return false;
+}
 
 
 app.listen(PORT, ()=>{
