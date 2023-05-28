@@ -8,7 +8,10 @@ const app = express();
 const PORT = 3000;
 
 let words = [];
-let currentWord;
+const word = {
+  current: '',
+  currentPart: '',
+};
 
 const dictionaryPath = path.join(__dirname, '..', 'Dictionarys');
 const startLobbyPath = path.join(__dirname, '..', 'StartLobby');
@@ -16,6 +19,7 @@ const gameLobbyPath = path.join(__dirname, '..', 'GameLobby');
 
 app.use(express.static(startLobbyPath));
 app.use(express.static(gameLobbyPath));
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(startLobbyPath, "StartLobby.html"));
@@ -27,9 +31,16 @@ app.get('/gameLobby', (req, res) => {
 });
 
 app.get('/getWord', (req, res) => {
-  const word = getRandWord(); 
-
+  const word = getRandWordPart(); 
   res.json({ word: word });
+});
+
+app.post('/postText', (req, res) => {
+  let text = req.body.text;
+  console.log('Отримано текст з клієнта:', text);
+  if(acceptWord(text)){
+    res.json({ success: true });
+  } else res.json({ success: false });
 });
 
 function readDictionary(dic) {
@@ -52,23 +63,24 @@ function getRandNumberInRange(start, end){
 
 function getRandWord(){
   const randKey = getRandNumberInRange(0, words.length);
-  currentWord = words[randKey];
-  console.log(currentWord);
-  return currentWord;
+  word.current = words[randKey];
+  console.log(word.current);
+  return word.current;
 }
 
 function getRandWordPart() {//part from 2 to 3 letters
   const randWord = getRandWord();
   const startIndex = getRandNumberInRange(0, randWord.length - 3);
   const endIndex = startIndex + Math.floor(Math.random() * 2) + 2;
-  return randWord.slice(startIndex, endIndex);
+  word.currentPart = randWord.slice(startIndex, endIndex);
+  return word.currentPart;
 }
 
-function matchWord(word){
-  if(word === currentWord) return true;
-  else return false;
+function acceptWord(gottenWord){
+  if(gottenWord.toLowerCase().includes(word.currentPart) && words.includes(gottenWord.toLowerCase())){
+    return true;
+  } else return false;
 }
-
 
 app.listen(PORT, ()=>{
   console.log('We track port ' + PORT);
