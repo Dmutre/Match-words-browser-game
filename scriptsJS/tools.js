@@ -1,13 +1,16 @@
-"use strict";
+'use strict';
 
 const fs = require('node:fs');
 const path = require('node:path');
 
-let words = [];
-let currentWord;
+let words;
+const word = {
+  current: '',
+  currentPart: '',
+};
 
 function readDictionary(dic) {
-  fs.readFile(dic, 'utf-8', (err, data) => {
+  fs.readFile(path.join(dic, 'English-dict.txt'), 'utf-8', (err, data) => {
     if (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
@@ -26,19 +29,29 @@ function getRandNumberInRange(start, end){
 
 function getRandWord(){
   const randKey = getRandNumberInRange(0, words.length);
-  currentWord = words[randKey];
-  console.log(currentWord);
-  return currentWord;
+  word.current = words[randKey];
+  console.log(word.current);
+  return word.current;
 }
 
 function getRandWordPart() {//part from 2 to 3 letters
   const randWord = getRandWord();
   const startIndex = getRandNumberInRange(0, randWord.length - 3);
   const endIndex = startIndex + Math.floor(Math.random() * 2) + 2;
-  return randWord.slice(startIndex, endIndex);
+  word.currentPart = randWord.slice(startIndex, endIndex);
+  return word.currentPart;
 }
 
-function matchWord(word){
-  if(word === currentWord) return true;
-  else return false;
+function acceptWord(gottenWord){
+  if(gottenWord.toLowerCase().includes(word.currentPart) && words.includes(gottenWord.toLowerCase())){
+    return true;
+  } else return false;
+}
+
+module.exports = {
+  readDictionary,
+  acceptWord,
+  getRandWordPart,
+  words,
+  word,
 }
