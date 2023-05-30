@@ -2,6 +2,7 @@ body {
   background-color: #ecd7ff;
   margin: 0;
   padding: 0;
+  font-family: 'Pangolin', cursive;
 }
 
 .container {
@@ -30,6 +31,7 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
+  flex-direction: column; 
 }
 
 .window-text {
@@ -40,6 +42,11 @@ body {
   justify-content: center;
   border-radius: 50%;
   overflow: hidden;
+}
+
+.window-text span {
+  font-size: 36px;
+  line-height: 1.2;
 }
 
 .player {
@@ -62,9 +69,10 @@ body {
   border: none;
   background-color: #ffffff;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 16px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   margin-top: 10px;
+  font-family: 'Pangolin', cursive;
 }
 
 .player {
@@ -80,6 +88,8 @@ body {
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-right: 10px;
+  font-family: 'Pangolin', cursive;
+  font-size: 16px;
 }
 
 .player button {
@@ -92,6 +102,32 @@ body {
   display: inline-block;
   font-size: 16px;
   border-radius: 5px;
+  font-family: 'Pangolin', cursive;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer; 
+}
+
+.player button:hover {
+  background-color: #8e1fbf;
+}
+
+.player button.reset {
+  background-color: #a22ac6;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  font-family: 'Pangolin', cursive;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.player button.reset:hover {
+  background-color: #8e1fbf;
 }
 
 input[type="text"]:focus {
@@ -144,4 +180,51 @@ input[type="text"]:focus {
 
 .shake-animation {
   animation: shake 0.5s linear;
+}
+
+.hearts img.gray {
+  filter: grayscale(100%);
+}
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  color: rgb(105, 158, 77);
+  padding: 40px 80px;
+  font-family: 'Pangolin', cursive;
+  font-size: xx-large;
+  border-radius: 20px;
+  border-color: #a22ac6;
+  visibility: hidden;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-over.active {
+  visibility: visible;
+  z-index: 1;
+  opacity: 1;
+}
+
+#reload {
+  background-color: #a22ac6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: 'Pangolin', cursive;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+#reload:hover {
+  background-color: #8e1fbf;
 }

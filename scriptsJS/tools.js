@@ -3,14 +3,19 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
+const Dictionarys = {
+  eng: 'English-dict.txt',
+  ua: 'Ukrainian-dict2.0.txt',
+}
+
 let words;
 const word = {
   current: '',
   currentPart: '',
 };
 
-function readDictionary(dic) {
-  fs.readFile(path.join(dic, 'English-dict.txt'), 'utf-8', (err, data) => {
+function readDictionary(dicPath, dic) {
+  fs.readFile(path.join(dicPath, Dictionarys[dic]), 'utf-8', (err, data) => {
     if (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');

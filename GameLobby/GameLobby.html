@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="GameLobby.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pangolin&family=Source+Sans+Pro&display=swap" rel="stylesheet">
   <title>Document</title>
 </head>
 <body>
@@ -14,9 +15,18 @@
         <p id="messageWindow">Текст віконечка</p>
       </div>
     </div>
+    <div class="game-over">
+      <p class="game-over-text">Ти програв!</p>
+      <button onclick="reloadPage()" id="reload">Зіграти знову</button>
+    </div>
     <div class="player">
       <img src="playerIcon.png" alt="Player Icon">
-      <input type="text" placeholder="Введіть текст" id="inputWord">
+      <div class="hearts">
+        <img src="heart.png" alt="Heart Icon">
+        <img src="heart.png" alt="Heart Icon">
+        <img src="heart.png" alt="Heart Icon">
+      </div>
+      <input type="text" placeholder="Введіть слово" id="inputWord">
     </div>
   </div>
 

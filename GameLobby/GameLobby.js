@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', initialFunction);
 const messageWindow = document.getElementById('messageWindow');
 const inputWord = document.getElementById('inputWord');
-const timeToCheck = 10000;//Time to input word before it change and count as unfound
+const timeToCheck = 3000;//Time to input word before it change and count as unfound
 let timer;
 
 inputWord.addEventListener('keydown', (e) => {if(e.key === 'Enter') sendWord()});
@@ -12,6 +12,38 @@ function initialFunction(){
   wordReq();
   startTimer();
 }
+
+function reloadPage() {
+  location.reload();
+}
+
+function endGame(result){
+  if(result){
+    
+  } else {
+    gameOver.classList.add('active');
+    clearTimeout(timer);
+  }
+}
+
+function createHeartColorChanger() {
+  const hearts = document.querySelectorAll('.hearts img');
+  const totalHearts = hearts.length;
+  let heartIndex = totalHearts - 1;
+  const gameOver = document.querySelector('.game-over');
+
+  return function () {
+    hearts[heartIndex].classList.add('gray');
+    heartIndex--;
+
+    if (heartIndex < 0) {
+      gameOver.classList.add('active');
+      clearTimeout(timer);
+    }
+  };
+}
+
+const changeHeartColor = createHeartColorChanger();
 
 function wordReq(){
   fetch('/getWord')
@@ -31,6 +63,7 @@ function startTimer() {
     borderColor(false);
     wordReq();
     startTimer();
+    changeHeartColor();
   }, timeToCheck);
 }
 

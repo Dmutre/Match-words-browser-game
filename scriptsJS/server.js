@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/gameLobby', (req, res) => {
-  tools.readDictionary(dictionaryPath);
+  tools.readDictionary(dictionaryPath, 'eng');
   res.sendFile(path.join(gameLobbyPath, 'GameLobby.html'));
 });
 
