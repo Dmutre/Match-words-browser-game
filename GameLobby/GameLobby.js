@@ -3,7 +3,10 @@
 document.addEventListener('DOMContentLoaded', initialFunction);
 const messageWindow = document.getElementById('messageWindow');
 const inputWord = document.getElementById('inputWord');
-const timeToCheck = 1000;//Time to input word before it change and count as unfound
+const endGameBorder = document.getElementById('finalBorder');
+const counterValue = document.getElementById('counterValue');
+const timeToCheck = 10000;//Time to input word before it change and count as unfound
+const pointTarget = 40; //Number of points, that player have to reach
 let timer;
 
 inputWord.addEventListener('keydown', handleEnterKey);
@@ -23,13 +26,17 @@ function reloadPage() {
   location.reload();
 }
 
-function endGame(result){
-  if(result){
-    
-  } else {
-    clearTimeout(timer);
-    inputWord.removeEventListener('keydown', handleEnterKey);
-  }
+function loseGame(gameOver){
+  clearTimeout(timer);
+  inputWord.removeEventListener('keydown', handleEnterKey);
+  gameOver.classList.add('active');
+}
+
+function winGame(){
+  clearTimeout(timer);
+  inputWord.removeEventListener('keydown', handleEnterKey);
+  endGameBorder.innerHTML = 'You won!!!';
+  document.querySelector('.game-over').classList.add('active');
 }
 
 function createHeartColorChanger() {
@@ -43,13 +50,25 @@ function createHeartColorChanger() {
     heartIndex--;
 
     if (heartIndex < 0) {
-      gameOver.classList.add('active');
-      endGame(false);
+      loseGame(gameOver);
     }
   };
 }
 
 const changeHeartColor = createHeartColorChanger();
+
+function createCounter(){
+  let points = 0;
+  return function(word){
+    points += word.length; //We add length of correct word to points. One letter- one point
+    counterValue.innerHTML = points;
+    if(points >= pointTarget){
+      winGame();
+    }
+  }
+}
+
+const addPoints = createCounter();
 
 function wordReq(){
   fetch('/getWord')
@@ -92,6 +111,17 @@ function removeAnimation() {
   inputWord.classList.remove('shake-animation');
 }
 
+function checkCorrectness(answer, word){
+  if(answer.success === true){
+    wordReq();
+    startTimer();
+    addPoints(word);
+    borderColor(true);
+  } else{
+    borderColor(false);
+  }
+}
+
 function sendWord(){
   const inputValue = inputWord.value;
 
@@ -105,13 +135,7 @@ function sendWord(){
     .then(response => response.json())
     .then(result => {
       console.log('Отримано результат від сервера:', result);
-      if (result.success === true) {
-        wordReq();
-        startTimer();
-        borderColor(true);
-      } else{
-        borderColor(false);
-      }
+      checkCorrectness(result, inputValue);
     })
     .catch(error => {
       console.log('Сталася помилка:', error);

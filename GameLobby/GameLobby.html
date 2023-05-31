@@ -11,12 +11,15 @@
 <body>
   <div class="container">
     <div class="table">
+      <div class="counter">
+        <span id="counterValue">0</span>
+      </div>
       <div class="window">
         <p id="messageWindow">Текст віконечка</p>
       </div>
     </div>
     <div class="game-over">
-      <p class="game-over-text">Ти програв!</p>
+      <p class="game-over-text" id="finalBorder">Ти програв!</p>
       <button onclick="reloadPage()" id="reload">Зіграти знову</button>
     </div>
     <div class="player">

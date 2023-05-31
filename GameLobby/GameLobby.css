@@ -12,6 +12,23 @@ body {
   height: 100vh;
 }
 
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+#counterValue {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #a25ac6;
+  padding: 5px 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
 .window {
   width: 200px;
   height: 200px;
