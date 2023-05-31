@@ -45,8 +45,12 @@ body {
 }
 
 .window-text span {
-  font-size: 50px;
+  font-size: 100px;
   line-height: 1.2;
+}
+
+#messageWindow{
+  font-size: xx-large;
 }
 
 .player {
