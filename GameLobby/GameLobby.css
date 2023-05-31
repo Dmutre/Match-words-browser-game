@@ -45,7 +45,7 @@ body {
 }
 
 .window-text span {
-  font-size: 36px;
+  font-size: 50px;
   line-height: 1.2;
 }
 
@@ -193,7 +193,7 @@ input[type="text"]:focus {
   transform: translate(-50%, -50%);
   background-color: rgb(255, 255, 255);
   color: rgb(105, 158, 77);
-  padding: 40px 80px;
+  padding: 100px 200px;
   font-family: 'Pangolin', cursive;
   font-size: xx-large;
   border-radius: 20px;
