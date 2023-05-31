@@ -10,9 +10,11 @@ const PORT = 3000;
 const dictionaryPath = path.join(__dirname, '..', 'Dictionarys');
 const startLobbyPath = path.join(__dirname, '..', 'StartLobby');
 const gameLobbyPath = path.join(__dirname, '..', 'GameLobby');
+const commonIconsPath = path.join(__dirname, '..', 'commonIcons');
 
 app.use(express.static(startLobbyPath));
 app.use(express.static(gameLobbyPath));
+app.use(express.static(commonIconsPath));
 app.use(express.json());
 
 app.get('/', (req, res) => {

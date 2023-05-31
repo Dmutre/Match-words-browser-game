@@ -1,14 +1,15 @@
 'use strict';
 
-document.addEventListener('DOMContentLoaded', initialFunction);
 const messageWindow = document.getElementById('messageWindow');
 const inputWord = document.getElementById('inputWord');
 const endGameBorder = document.getElementById('finalBorder');
 const counterValue = document.getElementById('counterValue');
+const gameOver = document.querySelector('.game-over');
 const timeToCheck = 10000;//Time to input word before it change and count as unfound
-const pointTarget = 40; //Number of points, that player have to reach
+const pointTarget = 10; //Number of points, that player have to reach
 let timer;
 
+document.addEventListener('DOMContentLoaded', initialFunction);
 inputWord.addEventListener('keydown', handleEnterKey);
 
 function handleEnterKey(e) {
@@ -26,7 +27,7 @@ function reloadPage() {
   location.reload();
 }
 
-function loseGame(gameOver){
+function loseGame(){
   clearTimeout(timer);
   inputWord.removeEventListener('keydown', handleEnterKey);
   gameOver.classList.add('active');
@@ -36,21 +37,20 @@ function winGame(){
   clearTimeout(timer);
   inputWord.removeEventListener('keydown', handleEnterKey);
   endGameBorder.innerHTML = 'You won!!!';
-  document.querySelector('.game-over').classList.add('active');
+  gameOver.classList.add('active');
 }
 
 function createHeartColorChanger() {
   const hearts = document.querySelectorAll('.hearts img');
   const totalHearts = hearts.length;
   let heartIndex = totalHearts - 1;
-  const gameOver = document.querySelector('.game-over');
 
   return function () {
     hearts[heartIndex].classList.add('gray');
     heartIndex--;
 
     if (heartIndex < 0) {
-      loseGame(gameOver);
+      loseGame();
     }
   };
 }
