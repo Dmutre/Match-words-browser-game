@@ -14,18 +14,27 @@ const word = {
   currentPart: '',
 };
 
-function readDictionary(dicPath, dic) {
-  fs.readFile(path.join(dicPath, Dictionarys[dic]), 'utf-8', (err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      console.log('Data is reading');
-      words = data.split('\n').map(word => word.trim());
-      console.log('Data is completely read');
+function makeReadDictionary() {
+  let lastDict = 'eng';
+
+  return function(dicPath, dict) {
+    if (words === undefined || lastDict !== dict) {
+      fs.readFile(path.join(dicPath, Dictionarys[dict]), 'utf-8', (err, data) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+        } else {
+          console.log('Data is reading');
+          words = data.split('\n').map(word => word.trim());
+          console.log('Data is completely read');
+        }
+      });
     }
-  });
+    lastDict = dict;
+  }
 }
+
+const readDictionary = makeReadDictionary();
 
 function getRandNumberInRange(start, end){
   const number = Math.floor(Math.random() * (end - start) +start);
