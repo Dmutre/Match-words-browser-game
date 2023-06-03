@@ -16,10 +16,14 @@
     </div>
     <div class="options-panel">
       <div class="language-panel">
-        <input type="radio" id="languageEN" name="language" value="en" checked>
-        <label for="languageEN">English</label>
-        <input type="radio" id="languageUK" name="language" value="uk">
-        <label for="languageUK">Українська</label>
+        <div>
+          <input type="radio" id="languageEN" name="language" value="en" checked>
+          <label for="languageEN"><img src="britishFlag.png" alt="English"> English</label>
+        </div>
+        <div>
+          <input type="radio" id="languageUK" name="language" value="uk">
+          <label for="languageUK"><img src="ukrainianFlag.png" alt="Українська"> Українська</label>
+        </div>
       </div>
       <div class="hearts-panel">
         <label for="heartsRange">Hearts:</label>
@@ -28,7 +32,14 @@
       </div>
       <div class="score-panel">
         <label for="scoreInput">Score:</label>
-        <input type="number" id="scoreInput" min="0" value="0">
+        <div class="custom-select">
+          <select id="scoreInput">
+            <option value="30">Easy-30</option>
+            <option value="50">Normal-50</option>
+            <option value="100">Hard-100</option>
+            <option value="250">Hardcore-250</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
