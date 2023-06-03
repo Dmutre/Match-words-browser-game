@@ -11,9 +11,26 @@
 </head>
 <body>
   <div class="container">
-
-    <button id="startBtn" onclick="redirectToGameLobby()">START</button>
-    
+    <div class="start-btn-container">
+      <button id="startBtn" onclick="redirectToGameLobby()">START</button>
+    </div>
+    <div class="options-panel">
+      <div class="language-panel">
+        <input type="radio" id="languageEN" name="language" value="en" checked>
+        <label for="languageEN">English</label>
+        <input type="radio" id="languageUK" name="language" value="uk">
+        <label for="languageUK">Українська</label>
+      </div>
+      <div class="hearts-panel">
+        <label for="heartsRange">Hearts:</label>
+        <input type="range" id="heartsRange" min="3" max="5" value="3" step="1">
+        <span id="heartsCount">3</span>
+      </div>
+      <div class="score-panel">
+        <label for="scoreInput">Score:</label>
+        <input type="number" id="scoreInput" min="0" value="0">
+      </div>
+    </div>
   </div>
   
   <script src="StartLobby.js"></script>
