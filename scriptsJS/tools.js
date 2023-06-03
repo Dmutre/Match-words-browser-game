@@ -5,7 +5,7 @@ const path = require('node:path');
 
 const Dictionarys = {
   eng: 'English-dict.txt',
-  ua: 'Ukrainian-dict2.0.txt',
+  ua: 'Ukrainian-dict.txt',
 }
 
 let words;
@@ -14,24 +14,24 @@ const word = {
   currentPart: '',
 };
 
+
 function makeReadDictionary() {
   let lastDict = 'eng';
 
-  return function(dicPath, dict) {
+  return async (dicPath, dict) => {
     if (words === undefined || lastDict !== dict) {
-      fs.readFile(path.join(dicPath, Dictionarys[dict]), 'utf-8', (err, data) => {
-        if (err) {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
-        } else {
-          console.log('Data is reading');
-          words = data.split('\n').map(word => word.trim());
-          console.log('Data is completely read');
-        }
-      });
+      try {
+        const data = await fs.promises.readFile(path.join(dicPath, Dictionarys[dict]), 'utf-8');
+        console.log('Data is reading');
+        words = data.split('\n').map(word => word.trim());
+        console.log('Data is completely read');
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+      }
     }
     lastDict = dict;
-  }
+  };
 }
 
 const readDictionary = makeReadDictionary();

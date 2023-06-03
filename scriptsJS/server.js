@@ -1,6 +1,5 @@
 'use strict';
 
-const http = require('node:http');
 const path = require('node:path');
 const tools = require('./tools');
 const express = require('express');
@@ -21,8 +20,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(startLobbyPath, 'StartLobby.html'));
 });
 
-app.get('/gameLobby', (req, res) => {
-  tools.readDictionary(dictionaryPath, 'eng');
+app.get('/gameLobby', async (req, res) => {
+  await tools.readDictionary(dictionaryPath, 'ua');
   res.sendFile(path.join(gameLobbyPath, 'GameLobby.html'));
 });
 
