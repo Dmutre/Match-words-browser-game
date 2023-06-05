@@ -66,6 +66,4 @@ module.exports = {
   readDictionary,
   acceptWord,
   getRandWordPart,
-  words,
-  word,
 }

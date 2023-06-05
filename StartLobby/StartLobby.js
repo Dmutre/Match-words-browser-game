@@ -1,16 +1,31 @@
 'use strict';
 
-const chosenParanetrs = {
-  language: 'eng',
-  hearts: 3,
-  score: 30,
-  toString(){
-    return `{language: "${this.language}", hearts: ${this.hearts}, score: ${this.score}}`;
-  }
-}
-
-
-
 function redirectToGameLobby(){
-  window.location.href = '/gameLobby';
+  const language = document.querySelector('input[name="language"]:checked').value;
+  const hearts = document.getElementById('heartsRange').value;
+  const score = document.getElementById('scoreInput').value;
+
+  const data = {
+    language: language,
+    hearts: hearts,
+    score: score
+  };
+
+  fetch('/getParameters', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => {
+      if (response.ok) {
+        window.location.href = '/gameLobby';
+      } else {
+        console.error('Error:', response.statusText);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }

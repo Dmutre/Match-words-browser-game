@@ -21,13 +21,20 @@ app.get('/', (req, res) => {
 });
 
 app.get('/gameLobby', async (req, res) => {
-  await tools.readDictionary(dictionaryPath, 'ua');
+  let language = gameLobbyParameters.get().language;
+  await tools.readDictionary(dictionaryPath, language);
   res.sendFile(path.join(gameLobbyPath, 'GameLobby.html'));
 });
 
 app.get('/getWord', (req, res) => {
   const word = tools.getRandWordPart(); 
   res.json({ word: word });
+});
+
+app.post('/getParameters', (req, res) => {
+  let parameters = req.body;
+  gameLobbyParameters.set(parameters);
+  res.json({ ok: true });
 });
 
 app.post('/postText', (req, res) => {
@@ -41,3 +48,32 @@ app.post('/postText', (req, res) => {
 app.listen(PORT, ()=>{
   console.log('We track port ' + PORT);
 });
+
+function makeGameLobbyParameters(){
+  let language = 'eng';
+  let hearts = 3;
+  let score = 30;
+
+  function set(data){
+    language = data.language;
+    hearts = data.hearts;
+    score = data.score;
+
+    console.log('Встановлені параметри:\n', data);
+  }
+
+  function get(){
+    return {
+      language,
+      hearts,
+      score,
+    }
+  }
+
+  return {
+    get,
+    set,
+  }
+}
+
+const gameLobbyParameters = makeGameLobbyParameters();
