@@ -3,67 +3,118 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const Dictionarys = {
+const DictionarysPath = {
   eng: 'English-dict.txt',
   ua: 'Ukrainian-dict.txt',
-}
-
-let words;
-const word = {
-  current: '',
-  currentPart: '',
 };
 
+function makeDictionaryManager() {
+  const Dictionarys = {
+    eng: [],
+    ua: [],
+  };
 
-function makeReadDictionary() {
-  let lastDict = 'eng';
+  let currentDict = '';
+  let currentPart = '';
 
-  return async (dicPath, dict) => {
-    if (words === undefined || lastDict !== dict) {
-      try {
-        const data = await fs.promises.readFile(path.join(dicPath, Dictionarys[dict]), 'utf-8');
-        console.log('Data is reading');
-        words = data.split('\n').map(word => word.trim());
-        console.log('Data is completely read');
-      } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-      }
+  async function readDictionary(dicPath, dict) {
+    currentDict = dict;
+    if (Dictionarys[dict] && Dictionarys[dict].length !== 0) return;
+
+    try {
+      const data = await fs.promises.readFile(
+        path.join(dicPath, DictionarysPath[dict]),
+        'utf-8'
+      );
+      console.log('Data is reading');
+      Dictionarys[dict] = data.split('\n').map(word => word.trim());
+      console.log('Data is completely read');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
     }
-    lastDict = dict;
+  }
+
+  function getRandWord() {
+    if (currentDict === '') {
+      console.log('You haven`t read the dictionary');
+      return '';
+    }
+
+    const key = getRandNumberInRange(0, Dictionarys[currentDict].length);
+    console.log(Dictionarys[currentDict][key]);
+    return Dictionarys[currentDict][key];
+  }
+
+  function setCurrentPart(part){
+    currentPart = part;
+  }
+
+  function acceptWord(gottenWord){
+    if(gottenWord.toLowerCase().includes(currentPart) && Dictionarys[currentDict].includes(gottenWord.toLowerCase())){
+      return true;
+    } else return false;
+  }
+
+  return {
+    readDictionary,
+    getRandWord,
+    setCurrentPart,
+    acceptWord,
   };
 }
 
-const readDictionary = makeReadDictionary();
+const dictionaryManager = makeDictionaryManager();
 
-function getRandNumberInRange(start, end){
-  const number = Math.floor(Math.random() * (end - start) +start);
+function randWordPart(word) {
+  const startIndex = getRandNumberInRange(0, word.length - 3);
+  const endIndex = startIndex + Math.floor(Math.random() * 2) + 2;
+  return word.slice(startIndex, endIndex);
+}
+
+function getRandNumberInRange(start, end) {
+  const number = Math.floor(Math.random() * (end - start) + start);
   return number;
 }
 
-function getRandWord(){
-  const randKey = getRandNumberInRange(0, words.length);
-  word.current = words[randKey];
-  console.log(word.current);
-  return word.current;
+function getRandWordPart() {
+  const randomWord = dictionaryManager.getRandWord();
+  const randomWordPart = randWordPart(randomWord);
+  dictionaryManager.setCurrentPart(randomWordPart);
+  return randomWordPart;
 }
 
-function getRandWordPart() {//part from 2 to 3 letters
-  const randWord = getRandWord();
-  const startIndex = getRandNumberInRange(0, randWord.length - 3);
-  const endIndex = startIndex + Math.floor(Math.random() * 2) + 2;
-  word.currentPart = randWord.slice(startIndex, endIndex);
-  return word.currentPart;
+function makeGameLobbyParameters() {
+  let language = 'eng';
+  let hearts = 3;
+  let score = 30;
+
+  function set(data) {
+    language = data.language;
+    hearts = data.hearts;
+    score = data.score;
+
+    console.log('Встановлені параметри:\n', data);
+  }
+
+  function get() {
+    return {
+      language,
+      hearts,
+      score,
+    };
+  }
+
+  return {
+    get,
+    set,
+  };
 }
 
-function acceptWord(gottenWord){
-  if(gottenWord.toLowerCase().includes(word.currentPart) && words.includes(gottenWord.toLowerCase())){
-    return true;
-  } else return false;
-}
+const gameLobbyParameters = makeGameLobbyParameters();
 
 module.exports = {
-  readDictionary,
-  acceptWord,
+  dictionaryManager,
+  gameLobbyParameters,
   getRandWordPart,
-}
+};

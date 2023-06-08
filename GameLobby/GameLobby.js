@@ -6,7 +6,7 @@ const endGameBorder = document.getElementById('finalBorder');
 const counterValue = document.getElementById('counterValue');
 const gameOver = document.querySelector('.game-over');
 const timeToCheck = 10000;//Time to input word before it change and count as unfound
-const pointTarget = 10; //Number of points, that player have to reach
+const pointTarget = 30; //Number of points, that player have to reach
 let timer;
 
 document.addEventListener('DOMContentLoaded', initialFunction);
