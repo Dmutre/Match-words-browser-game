@@ -1,5 +1,12 @@
 'use strict';
 
+const heartsRange = document.getElementById('heartsRange');
+const heartsCount = document.getElementById('heartsCount');
+
+heartsRange.addEventListener('input', () => {
+  heartsCount.textContent = heartsRange.value;
+})
+
 function redirectToGameLobby(){
   const language = document.querySelector('input[name="language"]:checked').value;
   const hearts = document.getElementById('heartsRange').value;
