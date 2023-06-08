@@ -36,7 +36,7 @@ function makeDictionaryManager() {
   }
 
   function getRandWord() {
-    if (currentDict === '') {
+    if (!currentDict) {
       console.log('You haven`t read the dictionary');
       return '';
     }
