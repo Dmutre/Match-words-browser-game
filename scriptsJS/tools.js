@@ -27,11 +27,11 @@ function makeDictionaryManager() {
         'utf-8'
       );
       console.log('Data is reading');
-      Dictionarys[dict] = data.split('\n').map(word => word.trim());
+      Dictionarys[dict] = data.split('\n').map(word => word.trim().toLowerCase());
       console.log('Data is completely read');
     } catch (err) {
       console.error(err);
-      res.status(500).send('Internal Server Error');
+      res.status(500).send('Server Error with reading data');
     }
   }
 
