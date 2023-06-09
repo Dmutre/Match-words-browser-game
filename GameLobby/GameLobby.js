@@ -5,8 +5,7 @@ const inputWord = document.getElementById('inputWord');
 const endGameBorder = document.getElementById('finalBorder');
 const counterValue = document.getElementById('counterValue');
 const gameOver = document.querySelector('.game-over');
-const timeToCheck = 2000; // Час для введення слова до його зміни та позначення як незнайденого
-let timer;
+const timeToCheck = 10000; // Час для введення слова до його зміни та позначення як незнайденого
 
 document.addEventListener('DOMContentLoaded', initialFunction);
 inputWord.addEventListener('keydown', handleEnterKey);
@@ -17,21 +16,36 @@ function handleEnterKey(e) {
   }
 }
 
-async function initialFunction() {
-  await gameLobbyParameters.getParametersFromServer();
-  wordReq();
-  startTimer();
-}
+function makeTimerManager(){
+  let timer;
 
-function startTimer() {
-  clearTimeout(timer);
-  timer = setTimeout(() => {
+  function startTimer(){
+    clearTimeout(timer);
+    timer = setTimeout(() => {
     console.log('Таймер завершився. Ти не встиг!');
     borderColor(false);
     wordReq();
     startTimer();
     heartManager.removeHeart();
-  }, timeToCheck);
+    }, timeToCheck);
+  }
+
+  function clearTimer(){
+    clearTimeout(timer);
+  }
+
+  return{
+    startTimer,
+    clearTimer,
+  }
+}
+
+const timerManager = makeTimerManager();
+
+function initialFunction() {
+  gameLobbyParameters.getParametersFromServer();
+  wordReq();
+  timerManager.startTimer();
 }
 
 function reloadPage() {
@@ -39,8 +53,7 @@ function reloadPage() {
 }
 
 function makeGameLobbyParameters() {
-  let hearts = 3; // Кількість сердець
-  let score = 30; // Кількість балів для перемоги
+  let hearts, score; // Кількість сердець та потрібна кількість балів для перемоги
 
   function getParameters() {
     return {
@@ -77,13 +90,13 @@ function makeGameLobbyParameters() {
 const gameLobbyParameters = makeGameLobbyParameters();
 
 function loseGame() {
-  clearTimeout(timer);
+  timerManager.clearTimer();
   inputWord.removeEventListener('keydown', handleEnterKey);
   gameOver.classList.add('active');
 }
 
 function winGame() {
-  clearTimeout(timer);
+  timerManager.clearTimer();
   inputWord.removeEventListener('keydown', handleEnterKey);
   endGameBorder.innerHTML = 'Ти переміг!!!';
   gameOver.classList.add('active');
@@ -169,14 +182,13 @@ function removeAnimation() {
 }
 
 function checkCorrectness(answer, word) {
-  if (answer.success === true) {
+  if (answer.success) {
     wordReq();
-    startTimer();
+    timerManager.startTimer();
     addPoints(word);
-    borderColor(true);
-  } else {
-    borderColor(false);
   }
+
+  borderColor(answer.success);
 }
 
 function sendWordToCheck() {
