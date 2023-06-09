@@ -234,6 +234,10 @@ input[type="text"]:focus {
   opacity: 1;
 }
 
+.hearts img.gray {
+  filter: grayscale(100%);
+}
+
 #reload {
   background-color: #a22ac6;
   color: white;

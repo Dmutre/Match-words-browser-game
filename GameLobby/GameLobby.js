@@ -5,8 +5,7 @@ const inputWord = document.getElementById('inputWord');
 const endGameBorder = document.getElementById('finalBorder');
 const counterValue = document.getElementById('counterValue');
 const gameOver = document.querySelector('.game-over');
-const timeToCheck = 10000;//Time to input word before it change and count as unfound
-const pointTarget = 30; //Number of points, that player have to reach
+const timeToCheck = 2000; // Час для введення слова до його зміни та позначення як незнайденого
 let timer;
 
 document.addEventListener('DOMContentLoaded', initialFunction);
@@ -18,31 +17,43 @@ function handleEnterKey(e) {
   }
 }
 
-function initialFunction(){
+async function initialFunction() {
+  await gameLobbyParameters.getParametersFromServer();
   wordReq();
   startTimer();
-  gameLobbyParameters.getParametersFromServer();
+}
+
+function startTimer() {
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    console.log('Таймер завершився. Ти не встиг!');
+    borderColor(false);
+    wordReq();
+    startTimer();
+    heartManager.removeHeart();
+  }, timeToCheck);
 }
 
 function reloadPage() {
   location.reload();
 }
 
-function makeGameLobbyParameters(){
-  let hearts = 3;
-  let score = 30;
+function makeGameLobbyParameters() {
+  let hearts = 3; // Кількість сердець
+  let score = 30; // Кількість балів для перемоги
 
-  function getParameters(){
+  function getParameters() {
     return {
       hearts,
       score,
-    }
+    };
   }
 
-  function setParameters(parameters){
+  function setParameters(parameters) {
     hearts = parameters.hearts;
     score = parameters.score;
     console.log(hearts + '\n' + score);
+    heartManager.createHearts(hearts);
   }
 
   function getParametersFromServer() {
@@ -57,34 +68,47 @@ function makeGameLobbyParameters(){
       });
   }
 
-  return{
+  return {
     getParameters,
     getParametersFromServer,
-  }
-  
+  };
 }
 
 const gameLobbyParameters = makeGameLobbyParameters();
 
-function loseGame(){
+function loseGame() {
   clearTimeout(timer);
   inputWord.removeEventListener('keydown', handleEnterKey);
   gameOver.classList.add('active');
 }
 
-function winGame(){
+function winGame() {
   clearTimeout(timer);
   inputWord.removeEventListener('keydown', handleEnterKey);
-  endGameBorder.innerHTML = 'You won!!!';
+  endGameBorder.innerHTML = 'Ти переміг!!!';
   gameOver.classList.add('active');
 }
 
 function makeHeartColorChanger() {
-  const hearts = document.querySelectorAll('.hearts img');
-  const totalHearts = hearts.length;
-  let heartIndex = totalHearts - 1;
+  let heartIndex;
+  let hearts = []; // Зберігатиме посилання на всі елементи сердець
 
-  return function () {
+  function createHearts(){
+    const heartsContainer = document.querySelector('.hearts');
+    const totalHearts = gameLobbyParameters.getParameters().hearts;
+    console.log(totalHearts);
+
+    for (let i = 0; i < totalHearts; i++) {
+      const heartImg = document.createElement('img');
+      heartImg.src = 'heart.png';
+      heartImg.alt = 'Heart Icon';
+      hearts.push(heartImg);
+      heartsContainer.appendChild(heartImg);
+    }
+    heartIndex = totalHearts - 1;
+  }
+
+  function removeHeart() {
     hearts[heartIndex].classList.add('gray');
     heartIndex--;
 
@@ -92,24 +116,29 @@ function makeHeartColorChanger() {
       loseGame();
     }
   };
+
+  return{
+    createHearts,
+    removeHeart,
+  }
 }
 
-const removeHearts = makeHeartColorChanger();
+const heartManager = makeHeartColorChanger();
 
-function makeCounter(){
+function makeCounter() {
   let points = 0;
-  return function(word){
-    points += word.length; //We add length of correct word to points. One letter- one point
+  return function (word) {
+    points += word.length; // Додаємо довжину правильного слова до балів. Один символ - один бал
     counterValue.innerHTML = points;
-    if(points >= pointTarget){
+    if (points >= gameLobbyParameters.getParameters().score) {
       winGame();
     }
-  }
+  };
 }
 
 const addPoints = makeCounter();
 
-function wordReq(){
+function wordReq() {
   fetch('/getWord')
     .then(response => response.json())
     .then(data => {
@@ -118,17 +147,6 @@ function wordReq(){
     .catch(error => {
       console.log('Помилка при отриманні слова:', error);
     });
-}
-
-function startTimer() {
-  clearTimeout(timer);
-  timer = setTimeout(() => {
-    console.log('Таймер завершився. Ти невстиг!');
-    borderColor(false);
-    wordReq();
-    startTimer();
-    removeHearts();
-  }, timeToCheck);
 }
 
 function borderColor(isCorrect) {
@@ -150,18 +168,18 @@ function removeAnimation() {
   inputWord.classList.remove('shake-animation');
 }
 
-function checkCorrectness(answer, word){
-  if(answer.success === true){
+function checkCorrectness(answer, word) {
+  if (answer.success === true) {
     wordReq();
     startTimer();
     addPoints(word);
     borderColor(true);
-  } else{
+  } else {
     borderColor(false);
   }
 }
 
-function sendWordToCheck(){
+function sendWordToCheck() {
   const inputValue = inputWord.value;
 
   fetch('/postText', {
@@ -178,5 +196,5 @@ function sendWordToCheck(){
     })
     .catch(error => {
       console.log('Сталася помилка:', error);
-  });
+    });
 }
