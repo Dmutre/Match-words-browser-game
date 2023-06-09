@@ -14,18 +14,57 @@ inputWord.addEventListener('keydown', handleEnterKey);
 
 function handleEnterKey(e) {
   if (e.key === 'Enter') {
-    sendWord();
+    sendWordToCheck();
   }
 }
 
 function initialFunction(){
   wordReq();
   startTimer();
+  gameLobbyParameters.getParametersFromServer();
 }
 
 function reloadPage() {
   location.reload();
 }
+
+function makeGameLobbyParameters(){
+  let hearts = 3;
+  let score = 30;
+
+  function getParameters(){
+    return {
+      hearts,
+      score,
+    }
+  }
+
+  function setParameters(parameters){
+    hearts = parameters.hearts;
+    score = parameters.score;
+    console.log(hearts + '\n' + score);
+  }
+
+  function getParametersFromServer() {
+    fetch('/gameParameters')
+      .then(response => response.json())
+      .then(data => {
+        const parameters = data.parameters;
+        setParameters(parameters);
+      })
+      .catch(error => {
+        console.log('Помилка при отриманні параметрів з сервера:', error);
+      });
+  }
+
+  return{
+    getParameters,
+    getParametersFromServer,
+  }
+  
+}
+
+const gameLobbyParameters = makeGameLobbyParameters();
 
 function loseGame(){
   clearTimeout(timer);
@@ -40,7 +79,7 @@ function winGame(){
   gameOver.classList.add('active');
 }
 
-function createHeartColorChanger() {
+function makeHeartColorChanger() {
   const hearts = document.querySelectorAll('.hearts img');
   const totalHearts = hearts.length;
   let heartIndex = totalHearts - 1;
@@ -55,9 +94,9 @@ function createHeartColorChanger() {
   };
 }
 
-const changeHeartColor = createHeartColorChanger();
+const removeHearts = makeHeartColorChanger();
 
-function createCounter(){
+function makeCounter(){
   let points = 0;
   return function(word){
     points += word.length; //We add length of correct word to points. One letter- one point
@@ -68,7 +107,7 @@ function createCounter(){
   }
 }
 
-const addPoints = createCounter();
+const addPoints = makeCounter();
 
 function wordReq(){
   fetch('/getWord')
@@ -88,7 +127,7 @@ function startTimer() {
     borderColor(false);
     wordReq();
     startTimer();
-    changeHeartColor();
+    removeHearts();
   }, timeToCheck);
 }
 
@@ -122,7 +161,7 @@ function checkCorrectness(answer, word){
   }
 }
 
-function sendWord(){
+function sendWordToCheck(){
   const inputValue = inputWord.value;
 
   fetch('/postText', {

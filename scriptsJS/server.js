@@ -37,6 +37,11 @@ app.post('/getParameters', (req, res) => {
   res.json({ ok: true });
 });
 
+app.get('/gameParameters', (req, res) => {
+  const parameters = gameLobbyParameters.get();
+  res.json({ parameters });
+});
+
 app.post('/postText', (req, res) => {
   let text = req.body.text;
   console.log('Отримано текст з клієнта:', text);
