@@ -40,10 +40,27 @@ function makeDictionaryManager() {
       console.log('You haven`t read the dictionary');
       return '';
     }
-
-    const key = getRandNumberInRange(0, Dictionarys[currentDict].length);
-    console.log(Dictionarys[currentDict][key]);
-    return Dictionarys[currentDict][key];
+  
+    const allowedChars = /[a-zA-Zа-яА-ЯЇїІіЄєҐґ]/;
+    const maxAttempts = 10;
+  
+    let attempts = 0;
+    let word = '';
+  
+    while (attempts < maxAttempts) {
+      const key = getRandNumberInRange(0, Dictionarys[currentDict].length);
+      word = Dictionarys[currentDict][key];
+  
+      if (allowedChars.test(word)) {
+        console.log(word);
+        return word;
+      }
+  
+      attempts++;
+    }
+  
+    console.log('Unable to find a valid word');
+    return word;
   }
 
   function setCurrentPart(part){
