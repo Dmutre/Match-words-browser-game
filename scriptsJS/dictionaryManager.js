@@ -2,6 +2,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const config = require('./config.json');
 
 const DICTIONARIES_PATH = {
   eng: 'English-dict.txt',
@@ -20,7 +21,7 @@ function makeDictionaryManager() {
   async function readDictionary(dicPath, dict) {
     currentDict = dict;
     if (Dictionaries[dict] && Dictionaries[dict].length !== 0) return;
-
+    
     try {
       const data = await fs.promises.readFile(
         path.join(dicPath, DICTIONARIES_PATH[dict]),
@@ -31,7 +32,6 @@ function makeDictionaryManager() {
       console.log('Data is completely read');
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error with reading file');
     }
   }
 
@@ -101,37 +101,38 @@ function getRandWordPart() {
   return randomWordPart;
 }
 
-function makeGameLobbyParameters() {
-  let language = 'eng';
-  let hearts = 3;
-  let score = 30;
-
-  function set(data) {
-    language = data.language;
-    hearts = data.hearts;
-    score = data.score;
-
-    console.log('Встановлені параметри:\n', data);
+class gameLobbyParameters {
+  constructor(language, hearts, score){
+    this.language = language;
+    this.hearts = hearts;
+    this.score = score;
   }
 
-  function get() {
+  get() {
     return {
-      language,
-      hearts,
-      score,
+      language: this.language,
+      hearts: this.hearts,
+      score: this.score,
     };
   }
 
-  return {
-    get,
-    set,
-  };
+  set(parameters) {
+    this.language = parameters.language;
+    this.hearts = parameters.hearts;
+    this.score = parameters.score;
+
+    console.log('Встановлені параметри:\n', parameters);
+  }
 }
 
-const gameLobbyParameters = makeGameLobbyParameters();
+const gameLobbyParametersKeeper = new gameLobbyParameters(
+  config.defaultGameLobbyParameters.language,
+  config.defaultGameLobbyParameters.hearts,
+  config.defaultGameLobbyParameters.score
+);
 
 module.exports = {
   dictionaryManager,
-  gameLobbyParameters,
+  gameLobbyParametersKeeper,
   getRandWordPart,
 };

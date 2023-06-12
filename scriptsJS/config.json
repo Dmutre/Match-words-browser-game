@@ -1,0 +1,7 @@
+{
+  "defaultGameLobbyParameters" : {
+    "score" : 30,
+    "hearts" : 3,
+    "language" : "eng"
+  }
+}

@@ -2,7 +2,7 @@
 
 const path = require('node:path');
 const express = require('express');
-const { getRandWordPart, dictionaryManager, gameLobbyParameters, } = require('./dictionaryManager');
+const { getRandWordPart, dictionaryManager, gameLobbyParametersKeeper, } = require('./dictionaryManager');
 const app = express();
 const PORT = 3000;
 
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/gameLobby', async (req, res) => {
-  const language = gameLobbyParameters.get().language;
+  const language = gameLobbyParametersKeeper.get().language;
   try{
     await dictionaryManager.readDictionary(dictionaryPath, language);
     res.sendFile(path.join(gameLobbyPath, 'GameLobby.html'));
@@ -38,12 +38,12 @@ app.get('/getWord', (req, res) => {
 
 app.post('/getParameters', (req, res) => {
   const parameters = req.body;
-  gameLobbyParameters.set(parameters);
+  gameLobbyParametersKeeper.set(parameters);
   res.json({ ok: true });
 });
 
 app.get('/gameParameters', (req, res) => {
-  const parameters = gameLobbyParameters.get();
+  const parameters = gameLobbyParametersKeeper.get();
   res.json({ parameters });
 });
 
