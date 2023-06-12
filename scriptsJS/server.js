@@ -2,7 +2,7 @@
 
 const path = require('node:path');
 const express = require('express');
-const { getRandWordPart, dictionaryManager, gameLobbyParameters, } = require('./tools');
+const { getRandWordPart, dictionaryManager, gameLobbyParameters, } = require('./dictionaryManager');
 const app = express();
 const PORT = 3000;
 
@@ -21,9 +21,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/gameLobby', async (req, res) => {
-  let language = gameLobbyParameters.get().language;
-  await dictionaryManager.readDictionary(dictionaryPath, language);
-  res.sendFile(path.join(gameLobbyPath, 'GameLobby.html'));
+  const language = gameLobbyParameters.get().language;
+  try{
+    await dictionaryManager.readDictionary(dictionaryPath, language);
+    res.sendFile(path.join(gameLobbyPath, 'GameLobby.html'));
+  } catch(err){
+    console.log(err);
+    res.status(500).send('Server error. Can`t read file');
+  }
 });
 
 app.get('/getWord', (req, res) => {
@@ -32,7 +37,7 @@ app.get('/getWord', (req, res) => {
 });
 
 app.post('/getParameters', (req, res) => {
-  let parameters = req.body;
+  const parameters = req.body;
   gameLobbyParameters.set(parameters);
   res.json({ ok: true });
 });
@@ -43,7 +48,7 @@ app.get('/gameParameters', (req, res) => {
 });
 
 app.post('/postText', (req, res) => {
-  let text = req.body.text;
+  const text = req.body.text;
   console.log('Отримано текст з клієнта:', text);
   if(dictionaryManager.acceptWord(text)){
     res.json({ success: true });
@@ -52,4 +57,4 @@ app.post('/postText', (req, res) => {
 
 app.listen(PORT, ()=>{
   console.log('We track port ' + PORT);
-});
+}); 

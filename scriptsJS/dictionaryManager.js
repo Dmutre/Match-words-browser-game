@@ -3,13 +3,13 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const DictionarysPath = {
+const DICTIONARIES_PATH = {
   eng: 'English-dict.txt',
   ua: 'Ukrainian-dict.txt',
 };
 
 function makeDictionaryManager() {
-  const Dictionarys = {
+  const Dictionaries = {
     eng: [],
     ua: [],
   };
@@ -19,19 +19,19 @@ function makeDictionaryManager() {
 
   async function readDictionary(dicPath, dict) {
     currentDict = dict;
-    if (Dictionarys[dict] && Dictionarys[dict].length !== 0) return;
+    if (Dictionaries[dict] && Dictionaries[dict].length !== 0) return;
 
     try {
       const data = await fs.promises.readFile(
-        path.join(dicPath, DictionarysPath[dict]),
+        path.join(dicPath, DICTIONARIES_PATH[dict]),
         'utf-8'
       );
       console.log('Data is reading');
-      Dictionarys[dict] = data.split('\n').map(word => word.trim().toLowerCase());
+      Dictionaries[dict] = data.split('\n').map(word => word.trim().toLowerCase());
       console.log('Data is completely read');
     } catch (err) {
       console.error(err);
-      res.status(500).send('Server Error with reading data');
+      res.status(500).send('Error with reading file');
     }
   }
 
@@ -48,8 +48,8 @@ function makeDictionaryManager() {
     let word = '';
   
     while (attempts < maxAttempts) {
-      const key = getRandNumberInRange(0, Dictionarys[currentDict].length);
-      word = Dictionarys[currentDict][key];
+      const key = getRandNumberInRange(0, Dictionaries[currentDict].length);
+      word = Dictionaries[currentDict][key];
   
       if (allowedChars.test(word)) {
         console.log(word);
@@ -68,7 +68,7 @@ function makeDictionaryManager() {
   }
 
   function acceptWord(gottenWord){
-    if(gottenWord.toLowerCase().includes(currentPart) && Dictionarys[currentDict].includes(gottenWord.toLowerCase())){
+    if(gottenWord.toLowerCase().includes(currentPart) && Dictionaries[currentDict].includes(gottenWord.toLowerCase())){
       return true;
     } else return false;
   }
