@@ -4,7 +4,7 @@
   "description": "Browser game",
   "main": "/scriptsJS/server.js",
   "scripts": {
-    "start": "node ./scriptsJS/server.js"
+    "start": "nodemon ./scriptsJS/server.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/Dmutre/Match-words-bworser-game#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
